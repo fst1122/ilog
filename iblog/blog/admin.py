@@ -6,6 +6,7 @@ from .models import Post, Category, Tag
 from .adminforms import PostAdminForm
 from iblog.custom_site import custom_site
 from django.contrib.admin.models import LogEntry
+from iblog.base_admin import BaseOwnerAdmin
 
 
 class PostInline(admin.TabularInline):
@@ -15,7 +16,7 @@ class PostInline(admin.TabularInline):
 
 
 @admin.register(Category)
-class CategoryAdmin(admin.ModelAdmin):
+class CategoryAdmin(BaseOwnerAdmin):
     list_display = ('name', 'status', 'is_nav', 'post_count','created_time')
     fields = ('name', 'status', 'is_nav')
 
@@ -25,19 +26,11 @@ class CategoryAdmin(admin.ModelAdmin):
         return obj.post_set.count()
     post_count.short_description = '文章数量'
 
-    def save_model(self, request, obj, form, change):
-        obj.owner = request.user
-        return super(CategoryAdmin, self).save_model(request, obj, form, change)
-
 
 @admin.register(Tag)
-class TagAdmin(admin.ModelAdmin):
+class TagAdmin(BaseOwnerAdmin):
     list_display = ('name', 'status', 'created_time')
     fields = ('name', 'status')
-
-    def save_model(self, request, obj, form, change):
-        obj.owner = request.user
-        return super(TagAdmin, self).save_model(request, obj, form, change)
 
 
 class CategoryOwnerFilter(admin.SimpleListFilter):
@@ -57,7 +50,7 @@ class CategoryOwnerFilter(admin.SimpleListFilter):
 
 
 @admin.register(Post, site=custom_site)
-class PostAdmin(admin.ModelAdmin):
+class PostAdmin(BaseOwnerAdmin):
     list_display = [
         'title', 'category', 'status',
         'get_tags', 'created_time', 'operator'
@@ -105,14 +98,6 @@ class PostAdmin(admin.ModelAdmin):
             reverse('cus_admin:blog_post_change', args=(obj.id,))
         )
     operator.short_description = '操作'
-
-    def save_model(self, request, obj, form, change):
-        obj.owner = request.user
-        return super(PostAdmin, self).save_model(request, obj, form, change)
-
-    def get_queryset(self, request):
-        qs = super(PostAdmin, self).get_queryset(request)
-        return qs.filter(owner=request.user)
 
     class Media:
         css = {
