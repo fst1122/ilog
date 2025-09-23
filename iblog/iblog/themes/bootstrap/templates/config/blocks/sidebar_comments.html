@@ -1,0 +1,62 @@
+ <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <div class="sidebar-comments">
+        {% if comments %}
+            <ul class="list-group list-group-flush">
+                {% for comment in comments %}
+                    <li class="list-group-item px-0 py-2 border-0">
+                        <div class="d-flex">
+                            <div class="flex-shrink-0">
+                                <i class="fas fa-comment text-muted mt-1"></i>
+                            </div>
+                            <div class="flex-grow-1 ms-2">
+                                <div class="sidebar-comment-nickname text-primary fw-bold">
+                                    {{ comment.nickname }}
+                                </div>
+                                <div class="sidebar-comment-content text-muted small mb-1">
+                                    {{ comment.content }}
+                                </div>
+                                <a href="{% url 'post-detail' comment.target.id %}" class="sidebar-comment-target text-decoration-none small">
+                                    <i class="fas fa-reply me-1"></i> {{ comment.target.title }}
+                                </a>
+                            </div>
+                        </div>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <div class="text-center text-muted py-3">
+                <i class="fas fa-comment-slash fa-2x mb-2"></i>
+                <p class="mb-0">暂无评论</p>
+            </div>
+        {% endif %}
+    </div>
+
+    <style>    .sidebar-comments .list-group-item {
+            transition: background-color 0.2s;
+        }
+        .sidebar-comments .list-group-item:hover {
+            background-color: #f8f9fa;
+            border-radius: 5px;
+        }
+        .sidebar-comment-content {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .sidebar-comment-target {
+            color: #667eea !important;
+            font-size: 0.8rem;
+        }
+        .sidebar-comment-target:hover {
+            color: #764ba2 !important;
+            text-decoration: underline !important;
+        }
+    </style>
+</body>
+</html>
