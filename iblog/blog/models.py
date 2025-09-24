@@ -114,12 +114,12 @@ class Post(models.Model):
 
     @classmethod
     def latest_posts(cls):
-        queryset = cls.objects.filter(status=cls.STATUS_NORMAL)
+        queryset = cls.objects.filter(status=cls.STATUS_NORMAL).order_by('-created_time')
         return queryset
 
     @classmethod
     def hot_posts(cls):
-        return cls.objects.filter(status=cls.STATUS_NORMAL).order_by('-pv')
+        return cls.objects.filter(status=cls.STATUS_NORMAL).order_by('-pv')[:5]
 
 
     def save(self, *args, **kwargs):
