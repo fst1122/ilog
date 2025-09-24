@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>友情链接</title>
+</head>
+<body>
+    {% extends "blog/base.html" %}
+    {% block title %}友情链接{% endblock %}
+
+    {% block main %}
+    <div class="container">
+        <h2>友情链接</h2>
+        <div class="row">
+            {% if friend_links %}
+                {% for link in friend_links %}
+                <div class="col-md-4 mb-3">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">
+                                <a href="{{ link.href }}" target="_blank" rel="noopener noreferrer">
+                                    {{ link.title }}
+                                </a>
+                            </h5>
+                            <p class="card-text">{{ link.desc }}</p>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            {% else %}
+                <div class="col-12">
+                    <p>暂无友情链接</p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+    {% endblock %}
+</body>
+</html>
