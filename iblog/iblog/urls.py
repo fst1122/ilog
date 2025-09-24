@@ -24,6 +24,7 @@ from blog.views import (
     SearchView, AuthorView,
 )
 from config.views import LinkListView
+from comment.views import CommentView
 
 
 urlpatterns = [
@@ -36,4 +37,5 @@ urlpatterns = [
     path('links/', LinkListView.as_view(), name='links'),
     path('search/', SearchView.as_view(), name='search'),
     path('author/<int:owner_id>/', AuthorView.as_view(), name='author'),
+    path('comment/', CommentView.as_view(), name='comment'),
 ]

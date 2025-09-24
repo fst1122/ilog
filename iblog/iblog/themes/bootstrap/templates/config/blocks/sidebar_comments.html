@@ -18,10 +18,10 @@
                                 <div class="sidebar-comment-nickname text-primary fw-bold">
                                     {{ comment.nickname }}
                                 </div>
-                                <div class="sidebar-comment-content text-muted small mb-1">
-                                    {{ comment.content }}
+                                <div class="sidebar-comment-content text-muted small mb-1" title="{{ comment.content }}">
+                                    {{ comment.content|truncatechars:15 }}
                                 </div>
-                                <a href="{% url 'post-detail' comment.target.id %}" class="sidebar-comment-target text-decoration-none small">
+                                <a href="{{ comment.target }}" class="sidebar-comment-target text-decoration-none small">
                                     <i class="fas fa-reply me-1"></i> {{ comment.target.title }}
                                 </a>
                             </div>

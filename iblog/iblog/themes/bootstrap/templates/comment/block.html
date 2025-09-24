@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <!-- 评论列表区域 -->
+    <div class="post-comments mt-5 pt-4 border-top">
+        <h3 class="mb-4">
+            <i class="fas fa-comments me-2"></i>评论
+            <span class="badge bg-secondary">{{ comment_list|length }}</span>
+        </h3>
+
+        <!-- 评论列表 -->
+        {% if comment_list %}
+            <div class="comments-list mb-5">
+                {% for comment in comment_list %}
+                    <div class="comment-item card mb-3 border-0 shadow-sm">
+                        <div class="card-body">
+                            <div class="d-flex align-items-start">
+                                <div class="comment-avatar bg-primary text-white rounded-circle d-flex align-items-center justify-content-center me-3"
+                                     style="width: 40px; height: 40px; flex-shrink: 0;">
+                                    <span>{{ comment.nickname|first|upper }}</span>
+                                </div>
+                                <div class="flex-grow-1">
+                                    <div class="d-flex justify-content-between align-items-center mb-2">
+                                        <h6 class="mb-0 text-primary">
+                                            {% if comment.website %}
+                                                <a href="{{ comment.website }}" target="_blank" rel="noopener noreferrer">
+                                                    {{ comment.nickname }}
+                                                </a>
+                                            {% else %}
+                                                {{ comment.nickname }}
+                                            {% endif %}
+                                        </h6>
+                                        <small class="text-muted">
+                                            <i class="far fa-clock me-1"></i>
+                                            {{ comment.created_time|date:"Y-m-d H:i" }}
+                                        </small>
+                                    </div>
+                                    <div class="comment-content">
+                                        {{ comment.content|linebreaks }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="alert alert-info text-center">
+                <i class="fas fa-comment-dots fa-2x mb-3"></i>
+                <p class="mb-0">暂无评论，快来抢沙发吧！</p>
+            </div>
+        {% endif %}
+    </div>
+
+    <!-- 评论表单 -->
+    <div class="comment-form card border-0 shadow-sm">
+        <div class="card-body">
+            <h4 class="card-title mb-4">
+                <i class="fas fa-pencil-alt me-2"></i>发表评论
+            </h4>
+            <form method="POST" action="/comment/" class="row">
+                {% csrf_token %}
+                <input type="hidden" name="target" value="{{ target }}">
+
+                <div class="col-md-6 mb-3">
+                    <label for="{{ comment_form.nickname.id_for_label }}" class="form-label">
+                        <i class="fas fa-user me-1"></i>昵称 *
+                    </label>
+                    {{ comment_form.nickname }}
+                    {% if comment_form.nickname.errors %}
+                        <div class="text-danger small mt-1">
+                            <i class="fas fa-exclamation-circle me-1"></i>{{ comment_form.nickname.errors }}
+                        </div>
+                    {% endif %}
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <label for="{{ comment_form.email.id_for_label }}" class="form-label">
+                        <i class="fas fa-envelope me-1"></i>邮箱 *
+                    </label>
+                    {{ comment_form.email }}
+                    {% if comment_form.email.errors %}
+                        <div class="text-danger small mt-1">
+                            <i class="fas fa-exclamation-circle me-1"></i>{{ comment_form.email.errors }}
+                        </div>
+                    {% endif %}
+                </div>
+
+                <div class="col-12 mb-3">
+                    <label for="{{ comment_form.website.id_for_label }}" class="form-label">
+                        <i class="fas fa-globe me-1"></i>网站
+                    </label>
+                    {{ comment_form.website }}
+                    {% if comment_form.website.errors %}
+                        <div class="text-danger small mt-1">
+                            <i class="fas fa-exclamation-circle me-1"></i>{{ comment_form.website.errors }}
+                        </div>
+                    {% endif %}
+                </div>
+
+                <div class="col-12 mb-3">
+                    <label for="{{ comment_form.content.id_for_label }}" class="form-label">
+                        <i class="fas fa-comment me-1"></i>内容 *
+                    </label>
+                    {{ comment_form.content }}
+                    {% if comment_form.content.errors %}
+                        <div class="text-danger small mt-1">
+                            <i class="fas fa-exclamation-circle me-1"></i>{{ comment_form.content.errors }}
+                        </div>
+                    {% endif %}
+                </div>
+
+                <div class="col-12">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-paper-plane me-1"></i>提交评论
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+    <style>    .comment-item {
+            transition: all 0.3s ease;
+            border-radius: 12px;
+        }
+
+        .comment-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .comment-avatar {
+            font-weight: bold;
+            font-size: 1rem;
+        }
+
+        .comment-content {
+            line-height: 1.6;
+            color: #555;
+        }
+
+        .comment-content p {
+            margin-bottom: 0.5rem;
+        }
+
+        .comment-form .form-control {
+            border-radius: 8px;
+            border: 1px solid #e1e5e9;
+            padding: 0.75rem 1rem;
+        }
+
+        .comment-form .form-control:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+        }
+
+        .card {
+            border-radius: 12px;
+        }
+
+        .alert-info {
+            border-radius: 12px;
+            background-color: #e3f2fd;
+            border: none;
+        }
+
+        .form-label {
+            font-weight: 500;
+            color: #333;
+        }
+
+        .list-group-item {
+            border-radius: 8px !important;
+            margin-bottom: 10px;
+            border: 1px solid #e9ecef !important;
+        }
+    </style>
+</body>
+</html>

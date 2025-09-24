@@ -1,39 +1,71 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>友情链接</title>
-</head>
-<body>
-    {% extends "blog/base.html" %}
-    {% block title %}友情链接{% endblock %}
+{% extends "blog/base.html" %}
+{% block title %}友情链接{% endblock %}
 
-    {% block main %}
-    <div class="container">
-        <h2>友情链接</h2>
-        <div class="row">
-            {% if friend_links %}
-                {% for link in friend_links %}
-                <div class="col-md-4 mb-3">
-                    <div class="card">
-                        <div class="card-body">
-                            <h5 class="card-title">
-                                <a href="{{ link.href }}" target="_blank" rel="noopener noreferrer">
-                                    {{ link.title }}
-                                </a>
-                            </h5>
-                            <p class="card-text">{{ link.desc }}</p>
+{% block main %}
+<div class="container">
+    <h2 class="mb-4">友情链接</h2>
+    <div class="row">
+        {% if link_list %}
+            {% for link in link_list %}
+            <div class="col-lg-4 col-md-6 mb-4">
+                <div class="card h-100 shadow-sm border-0 rounded-lg">
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title">
+                            <a href="{{ link.href }}" target="_blank" rel="noopener noreferrer"
+                               class="text-decoration-none stretched-link">
+                                {{ link.title }}
+                            </a>
+                        </h5>
+                        <div class="mt-auto">
+                            <small class="text-muted">
+                                <i class="fas fa-external-link-alt me-1"></i>访问网站
+                            </small>
                         </div>
                     </div>
                 </div>
-                {% endfor %}
-            {% else %}
-                <div class="col-12">
-                    <p>暂无友情链接</p>
+            </div>
+            {% endfor %}
+        {% else %}
+            <div class="col-12">
+                <div class="alert alert-info text-center">
+                    <i class="fas fa-info-circle me-2"></i>暂无友情链接
                 </div>
-            {% endif %}
-        </div>
+            </div>
+        {% endif %}
     </div>
-    {% endblock %}
-</body>
-</html>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .card:hover {
+        transform: translateY(-5px);
+        transition: transform 0.3s ease;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+
+    .card-title a {
+        color: #667eea;
+        font-weight: 600;
+    }
+
+    .card-title a:hover {
+        color: #764ba2;
+    }
+
+    .stretched-link::after {
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        z-index: 1;
+        content: "";
+    }
+
+    .card {
+        position: relative;
+        overflow: hidden;
+    }
+</style>
+{% endblock %}

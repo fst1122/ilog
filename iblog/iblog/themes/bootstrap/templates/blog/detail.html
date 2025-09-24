@@ -1,12 +1,6 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>detail</title>
-</head>
-<body>
     {% extends "./base.html" %}
     {% load static %}
+    {% load comment_block %}
 
     {% block title %}
         {{ post.title }}
@@ -65,6 +59,7 @@
                 </div>
             </div>
         </div>
+        {% comment_block request.path %}
     {% endblock %}
 
     {% block extra_css %}
@@ -142,5 +137,3 @@
             }
         </style>
     {% endblock %}
-</body>
-</html>
