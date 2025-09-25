@@ -19,6 +19,7 @@ class PostInline(admin.TabularInline):
 class CategoryAdmin(BaseOwnerAdmin):
     list_display = ('name', 'status', 'is_nav', 'post_count','created_time')
     fields = ('name', 'status', 'is_nav')
+    search_fields = ['name']
 
     inlines = [PostInline, ]
 
@@ -31,6 +32,7 @@ class CategoryAdmin(BaseOwnerAdmin):
 class TagAdmin(BaseOwnerAdmin):
     list_display = ('name', 'status', 'created_time')
     fields = ('name', 'status')
+    search_fields = ['name']
 
 
 class CategoryOwnerFilter(admin.SimpleListFilter):
@@ -49,7 +51,7 @@ class CategoryOwnerFilter(admin.SimpleListFilter):
         return queryset
 
 
-@admin.register(Post, site=custom_site)
+@admin.register(Post)
 class PostAdmin(BaseOwnerAdmin):
     list_display = [
         'title', 'category', 'status',
@@ -58,7 +60,8 @@ class PostAdmin(BaseOwnerAdmin):
     list_display_links = []
 
     list_filter = [CategoryOwnerFilter]
-    search_fields = ['title', 'category_name']
+    search_fields = ['title', 'category_name', 'tag_name']
+    autocomplete_fields = ['category', 'tag']
 
     actions_on_top = True
     actions_on_bottom = True
