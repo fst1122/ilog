@@ -1,3 +1,5 @@
+from functools import cached_property
+
 import mistune
 
 from django.db import models
@@ -121,6 +123,9 @@ class Post(models.Model):
     def hot_posts(cls):
         return cls.objects.filter(status=cls.STATUS_NORMAL).order_by('-pv')[:5]
 
+    @cached_property
+    def tags(self):
+        return ','.join(self.tag.values_list('name', flat=True))
 
     def save(self, *args, **kwargs):
         self.content_html = mistune.markdown(self.content)
