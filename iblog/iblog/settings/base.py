@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 from pathlib import Path
 import os
 
+
 from django.conf.global_settings import STATIC_ROOT, STATIC_URL, STATICFILES_DIRS
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -36,6 +37,8 @@ INSTALLED_APPS = [
     'blog',
     'config',
     'comment',
+    'ckeditor',
+    'ckeditor_uploader',
 
     'django.contrib.admin',
     'django.contrib.auth',
@@ -55,6 +58,23 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+CKEDITOR_CONFIGS = {
+    'default': {
+        'toolbar': 'Custom',
+        'width': '100%',
+        'height': '400',
+        'tabSpaces': 4,
+        'uiColor': '#f8f9fa',
+        'toolbarCanCollapse': True,
+        'startupFocus': False,
+    }
+}
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+CKEDITOR_UPLOAD_PATH = 'article_images'
+DEFAULT_FILE_STORAGE = 'iblog.storage.WatermarkStorage'
 
 ROOT_URLCONF = 'iblog.urls'
 
