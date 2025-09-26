@@ -80,6 +80,9 @@ class PostAdmin(BaseOwnerAdmin):
         ('内容', {
             'fields': (
                 'desc',
+                'is_md',
+                'content_ck',
+                'content_md',
                 'content',
             ),
         }),
@@ -104,9 +107,9 @@ class PostAdmin(BaseOwnerAdmin):
 
     class Media:
         css = {
-            'all': ("https://cdn.bootcss.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css",),
+            'all': ("css/bootstrap.css",),
         }
-        js = ('https://cdn.bootcss.com/bootstrap/4.0.0-beta.2/js/bootstrap.bundle.js',)
+        js = ('js/bootstrap.bundle.min.js',)
 
 
 
