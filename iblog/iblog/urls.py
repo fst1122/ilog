@@ -36,6 +36,7 @@ from blog.rss import LatestPostFeed
 from blog.sitemap import PostSitemap
 from blog.apis import PostViewSet, CategoryViewSet, TagViewSet
 from comment.apis import CommentViewSet
+from config.apis import LinkViewSet, SideBarViewSet
 
 
 router = DefaultRouter()
@@ -43,6 +44,8 @@ router.register(r'post', PostViewSet, basename='api-post')
 router.register(r'category', CategoryViewSet, basename='api-category')
 router.register(r'tag', TagViewSet, basename='api-tag')
 router.register(r'comment', CommentViewSet, basename='api-comment')
+router.register(r'link', LinkViewSet, basename='api-link')
+router.register(r'sidebar', SideBarViewSet, basename='api-sidebar')
 
 schema_view = get_schema_view(
     title="Blog API",
