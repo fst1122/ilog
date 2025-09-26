@@ -34,12 +34,15 @@ from config.views import LinkListView
 from comment.views import CommentView
 from blog.rss import LatestPostFeed
 from blog.sitemap import PostSitemap
-from blog.apis import PostViewSet, CategoryViewSet
+from blog.apis import PostViewSet, CategoryViewSet, TagViewSet
+from comment.apis import CommentViewSet
 
 
 router = DefaultRouter()
 router.register(r'post', PostViewSet, basename='api-post')
 router.register(r'category', CategoryViewSet, basename='api-category')
+router.register(r'tag', TagViewSet, basename='api-tag')
+router.register(r'comment', CommentViewSet, basename='api-comment')
 
 schema_view = get_schema_view(
     title="Blog API",

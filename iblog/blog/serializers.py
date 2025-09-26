@@ -1,6 +1,6 @@
 from rest_framework import serializers, pagination
 
-from .models import Post, Category
+from .models import Post, Category, Tag
 
 
 class PostSerializer(serializers.ModelSerializer):
@@ -21,14 +21,23 @@ class PostSerializer(serializers.ModelSerializer):
         format="%Y-%m-%d %H:%M:%S",
         read_only=True,
     )
+
+    url = serializers.HyperlinkedIdentityField(view_name='api:api-post-detail')
+
     class Meta:
         model = Post
         fields = [
+            'url',
             'id', 'title', 'category',
             'tag', 'owner', 'created_time',
         ]
 
 class PostDetailSerializer(serializers.ModelSerializer):
+    created_time = serializers.DateTimeField(
+        format="%Y-%m-%d %H:%M:%S",
+        read_only=True,
+    )
+
     class Meta:
         model = Post
         fields = [
@@ -38,6 +47,11 @@ class PostDetailSerializer(serializers.ModelSerializer):
         ]
 
 class CategorySerializer(serializers.ModelSerializer):
+    created_time = serializers.DateTimeField(
+        format="%Y-%m-%d %H:%M:%S",
+        read_only=True,
+    )
+
     class Meta:
         model = Category
         fields = [
@@ -46,6 +60,10 @@ class CategorySerializer(serializers.ModelSerializer):
 
 class CategoryDetailSerializer(CategorySerializer):
     posts = serializers.SerializerMethodField('paginated_posts')
+    created_time = serializers.DateTimeField(
+        format="%Y-%m-%d %H:%M:%S",
+        read_only=True,
+    )
 
     def paginated_posts(self, obj):
         posts = obj.post_set.filter(status=Post.STATUS_NORMAL)
@@ -61,6 +79,44 @@ class CategoryDetailSerializer(CategorySerializer):
 
     class Meta:
         model = Category
+        fields = [
+            'id', 'name', 'created_time',
+            'posts',
+        ]
+
+class TagSerializer(serializers.ModelSerializer):
+    created_time = serializers.DateTimeField(
+        format="%Y-%m-%d %H:%M:%S",
+        read_only=True,
+    )
+
+    class Meta:
+        model = Tag
+        fields = [
+            'id', 'name', 'created_time',
+        ]
+
+class TagDetailSerializer(TagSerializer):
+    posts = serializers.SerializerMethodField('paginated_posts')
+    created_time = serializers.DateTimeField(
+        format="%Y-%m-%d %H:%M:%S",
+        read_only=True,
+    )
+
+    def paginated_posts(self, obj):
+        posts = obj.post_set.filter(status=Post.STATUS_NORMAL)
+        paginator = pagination.PageNumberPagination()
+        page = paginator.paginate_queryset(posts, self.context['request'])
+        serializer = PostSerializer(page, many=True, context={'request': self.context['request']})
+        return {
+            'count': posts.count(),
+            'results': serializer.data,
+            'previous': paginator.get_previous_link(),
+            'next': paginator.get_next_link(),
+        }
+
+    class Meta:
+        model = Tag
         fields = [
             'id', 'name', 'created_time',
             'posts',

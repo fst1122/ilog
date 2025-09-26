@@ -4,10 +4,11 @@ from rest_framework.decorators import api_view
 from rest_framework.permissions import IsAdminUser
 from rest_framework.response import Response
 
-from .models import Post, Category
+from .models import Post, Category, Tag
 from .serializers import (
     PostSerializer, PostDetailSerializer,
-    CategorySerializer, CategoryDetailSerializer
+    CategorySerializer, CategoryDetailSerializer,
+    TagSerializer, TagDetailSerializer,
 )
 
 
@@ -32,4 +33,12 @@ class CategoryViewSet(viewsets.ReadOnlyModelViewSet):
 
     def retrieve(self, request, *args, **kwargs):
         self.serializer_class = CategoryDetailSerializer
+        return super().retrieve(request, *args, **kwargs)
+
+class TagViewSet(viewsets.ReadOnlyModelViewSet):
+    serializer_class = TagSerializer
+    queryset = Tag.objects.filter(status=Tag.STATUS_NORMAL)
+
+    def retrieve(self, request, *args, **kwargs):
+        self.serializer_class = TagDetailSerializer
         return super().retrieve(request, *args, **kwargs)
