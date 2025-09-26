@@ -19,6 +19,10 @@ from django.urls import path, include
 from django.contrib.sitemaps import views as sitemap_views
 from django.conf import settings
 from django.conf.urls.static import static
+from rest_framework.routers import DefaultRouter
+from rest_framework.documentation import include_docs_urls
+from rest_framework.schemas import get_schema_view
+from rest_framework.renderers import JSONOpenAPIRenderer, OpenAPIRenderer
 
 from .custom_site import custom_site
 from blog.views import (
@@ -30,7 +34,20 @@ from config.views import LinkListView
 from comment.views import CommentView
 from blog.rss import LatestPostFeed
 from blog.sitemap import PostSitemap
+from blog.apis import PostViewSet, CategoryViewSet
 
+
+router = DefaultRouter()
+router.register(r'post', PostViewSet, basename='api-post')
+router.register(r'category', CategoryViewSet, basename='api-category')
+
+schema_view = get_schema_view(
+    title="Blog API",
+    description="Blog API documentation",
+    version="1.0.0",
+    renderer_classes=[JSONOpenAPIRenderer],
+    public=True,
+)
 
 urlpatterns = [
     path('super_admin/', admin.site.urls, name='super-admin'),
@@ -47,4 +64,6 @@ urlpatterns = [
     path('feed/', LatestPostFeed(), name='rss'),
     path('sitemap.xml', sitemap_views.sitemap, {'sitemaps': {'posts': PostSitemap}}),
     path('ckeditor/', include('ckeditor_uploader.urls')),
+    path('api/', include((router.urls, 'api'), namespace='api'), name='api'),
+    path('api/docs/', schema_view, name='api-docs'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

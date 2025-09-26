@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'comment',
     'ckeditor',
     'ckeditor_uploader',
+    'rest_framework',
 
     'django.contrib.admin',
     'django.contrib.auth',
@@ -69,6 +70,11 @@ CKEDITOR_CONFIGS = {
         'toolbarCanCollapse': True,
         'startupFocus': False,
     }
+}
+
+REST_FRAMEWORK = {
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
+    'PAGE_SIZE': 2,
 }
 
 MEDIA_URL = '/media/'
